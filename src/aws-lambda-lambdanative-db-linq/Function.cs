@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using Amazon.Lambda.Core;
-using LambdaNative;
-using MySql.Data.MySqlClient;
-using System.Data;
+using Amazon.Lambda.Serialization.Json;
 using LinqToDB;
+using LinqToDB.Data;
 using LinqToDB.Common;
 using LinqToDB.Mapping;
 using LinqToDB.Configuration;
 using System.Linq;
-using LinqToDB.Data;
+using LambdaNative;
 
 namespace aws_lambda_lambdanative
 {
@@ -25,7 +24,7 @@ namespace aws_lambda_lambdanative
 
             Console.WriteLine("Log: After Connection");
 
-            using (var db = new lab())
+            using (var db = new DBConnection())
             {
                 Console.WriteLine("Log: After new Lab()");
 
@@ -35,13 +34,13 @@ namespace aws_lambda_lambdanative
 
                 Console.WriteLine("Log: After Linq Query");
 
-                List<Member> result = query.ToList();
+                List<Member> members = query.ToList();
 
                 Console.WriteLine("Log: After query and get list");
 
-                Console.WriteLine("Log: Count: " + result.Count);
+                Console.WriteLine("Log: Count: " + members.Count);
                 
-                return result;
+                return members;
             }
         }
     }
@@ -73,8 +72,8 @@ namespace aws_lambda_lambdanative
     {
         public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
 
-        public string DefaultConfiguration => "MySQL";
-        public string DefaultDataProvider => "MySQL";
+        public string DefaultConfiguration => "Mysql";
+        public string DefaultDataProvider => "Mysql";
 
         public IEnumerable<IConnectionStringSettings> ConnectionStrings
         {
@@ -83,17 +82,28 @@ namespace aws_lambda_lambdanative
                 yield return
                     new ConnectionStringSettings
                     {
-                        Name = "MySQL",
-                        ProviderName = "MySQL",
+                        Name = "DBConnection",
+                        ProviderName = "MySql",
                         ConnectionString = Environment.GetEnvironmentVariable("DB_CONNECTION")
                     };
             }
         }
     }
 
-    public class lab : LinqToDB.Data.DataConnection
+    public partial class DBConnection : LinqToDB.Data.DataConnection
     {
-        public lab() : base("lab") { }
+        public DBConnection()
+		{
+			InitDataContext();
+		}
+
+		public DBConnection(string configuration)
+			: base(configuration)
+		{
+			InitDataContext();
+		}
+
+		partial void InitDataContext();
 
         public ITable<Member> Member => GetTable<Member>();
     }

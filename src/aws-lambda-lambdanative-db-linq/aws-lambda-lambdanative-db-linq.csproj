@@ -19,12 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="linq2db.MySqlConnector" Version="2.7.0" />
     <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="1.0.0-alpha-*" />
-    <PackageReference Include="MySqlConnector" Version="0.53.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.7.0-preview4.19212.13" />
-
-    <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.5.0" />
     <PackageReference Include="LambdaNative" Version="1.0.0" />
+
+    <PackageReference Include="linq2db.MySql" Version="2.9.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="3.0.0" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.5.0" />
   </ItemGroup>
 </Project>
